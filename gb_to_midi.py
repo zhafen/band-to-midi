@@ -132,7 +132,7 @@ def parse_events(payload: bytes) -> list:
         if etype == 0x90:                          # Note On
             events.append(("note_on", channel, onset, rec[12], rec[11]))
 
-        elif status == 0x80 or etype == 0x80:      # Note Off (channel always 0 in source)
+        elif status == 0x80 or etype == 0x80 or status == 0x00:  # Note Off
             duration = struct.unpack_from("<I", rec, 12)[0]
             events.append(("note_off", duration))
 
@@ -188,7 +188,7 @@ def find_note_payloads(data: bytes) -> list[tuple[int, bytes]]:
     return sorted(candidates.items())
 
 
-def build_midi(data: bytes, bpm: float, ticks_per_beat: int = 480) -> mido.MidiFile:
+def build_midi(data: bytes, bpm: float, ticks_per_beat: int = 960) -> mido.MidiFile:
     """Build a mido.MidiFile (type 1) from the raw projectData binary."""
 
     note_blocks = find_note_payloads(data)   # [(counter, payload), ...]

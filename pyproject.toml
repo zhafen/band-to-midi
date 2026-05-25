@@ -13,3 +13,8 @@ dependencies = [
     "pylogic>=0.1.6",
     "scipy>=1.17.1",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
